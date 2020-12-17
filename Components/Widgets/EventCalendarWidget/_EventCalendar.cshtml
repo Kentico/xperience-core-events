@@ -1,0 +1,174 @@
+﻿@model Xperience.Core.Events.EventCalendarWidgetViewModel
+
+<link rel="stylesheet" type="text/css" href="~/_content/Xperience.Core.Events/tui-calendar.min.css" />
+<style>
+    #calendar-header {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+    }
+    .render-range {
+        font-weight: bold;
+    }
+    .header-spacer {
+        flex-grow: 2;
+    }
+    .calendar-modes > button {
+        border: none;
+        background: none;
+        outline: none;
+        text-decoration: underline;
+    }
+    .calendar-navigation > button {
+        border: none;
+        background: none;
+        outline: none;
+        text-align: center;
+        display: inline-block;
+        border-radius: 50%;
+        height: 20px;
+        width: 20px;
+    }
+</style>
+<script src="~/_content/Xperience.Core.Events/tui-code-snippet.min.js"></script>
+<script src="~/_content/Xperience.Core.Events/tui-calendar.min.js"></script>
+<script type="text/javascript">
+    if (document.readyState === 'loading') {
+        document.addEventListener("DOMContentLoaded", function () {
+            initCalendar();
+        });
+    } else {
+        initCalendar();
+    }
+
+    let CalendarList = [], mainCalendar;
+
+    const addCalendars = () => {
+        const calendars = @Html.Raw(Json.Serialize(Model.Calendars));
+        CalendarList.push(...calendars);
+    }
+
+    const findCalendar = (id) => {
+        let found;
+
+        CalendarList.forEach(function (calendar) {
+            if (calendar.id === id) {
+                found = calendar;
+            }
+        });
+
+        return found || CalendarList[0];
+    }
+
+    const addSchedules = () => {
+        const json = @Html.Raw(Json.Serialize(Model.Events));
+        json.forEach(s => {
+            // Make custom (non-schedule) data available in raw
+            s.raw = {
+                showAttendeeCount: s.showAttendeeCount,
+                showAttendeeNames: s.showAttendeeNames,
+                attendeeNames: s.attendeeNames,
+                capacity: s.capacity,
+                summary: s.summary,
+                attendeeCount: s.attendeeCount,
+                url: s.url
+            };
+        });
+        mainCalendar.createSchedules(json);
+    }
+
+    const getTimeTemplate = (schedule) => {
+        let html = [];
+        if (!schedule.isAllDay) {
+            const time = schedule.start.toDate().toLocaleTimeString(undefined, { timeStyle: 'short' });
+            html.push(time);
+        }
+        html.push(' ' + schedule.title);
+        return html.join('');
+    }
+
+    const popupDetailBody = (schedule) => {
+        let html = [];
+
+        if (schedule.raw.summary) {
+            html.push('<b>');
+            html.push(schedule.raw.summary);
+            html.push('</b>');
+        }
+
+        if (schedule.raw.showAttendeeCount && schedule.raw.capacity > 0) {
+            html.push('<br/><span><i class="tui-full-calendar-icon tui-full-calendar-ic-user-b"></i></span>');
+            html.push(schedule.raw.attendeeCount);
+            html.push(' of ');
+            html.push(schedule.raw.capacity);
+        }
+        if (schedule.raw.showAttendeeNames && schedule.raw.attendeeNames !== '') {
+            html.push('<br/>Attendees: ');
+            html.push(schedule.raw.attendeeNames);
+        }
+
+        html.push('<br/><a href="');
+        html.push(schedule.raw.url);
+        html.push('">View details &gt;</a>');
+
+        return html.join('');
+    }
+
+    function initCalendar() {
+        // Options: https://nhn.github.io/tui.calendar/latest/Options
+        const Calendar = tui.Calendar;
+        mainCalendar = new Calendar('#calendar', {
+            defaultView: 'month',
+            template: {
+                time: getTimeTemplate,
+                popupDetailBody: popupDetailBody
+            },
+            isReadOnly: true,
+            calendars: CalendarList,
+            useDetailPopup: true
+        });
+        addCalendars();
+        addSchedules();
+        updateHeader();
+
+        // Raise init event
+        const event = new CustomEvent('calendar-init', { detail: { calendar: mainCalendar } });
+        document.dispatchEvent(event);
+    }
+
+    const moveToNextOrPrevRange = (val) => {
+        if (val === -1) {
+            mainCalendar.prev();
+        } else if (val === 1) {
+            mainCalendar.next();
+        }
+        updateHeader();
+    }
+
+    const updateHeader = () => {
+        let options = { year: 'numeric', month: 'long' };
+        let header = mainCalendar.getDate().toDate().toLocaleString(undefined, options);
+        document.getElementById('renderRange').innerHTML = header;
+    }
+
+    const changeView = (mode) => { mainCalendar.changeView(mode); }
+</script>
+
+<div id="calendar-header">
+    <span class="calendar-navigation">
+        <button type="button" onclick="moveToNextOrPrevRange(-1)">
+            <i class="tui-full-calendar-icon tui-full-calendar-ic-arrow-left"></i>
+        </button>
+        <span id="renderRange" class="render-range"></span>
+        <button type="button" onclick="moveToNextOrPrevRange(1)">
+            <i class="tui-full-calendar-icon tui-full-calendar-ic-arrow-right"></i>
+        </button>
+    </span>
+    <span class="header-spacer"></span>
+    <span class="calendar-modes">
+        <button onclick="changeView('month')">Month</button>
+        <button onclick="changeView('week')">Week</button>
+        <button onclick="changeView('day')">Day</button>
+    </span>
+</div>
+<div id="calendar"></div>
