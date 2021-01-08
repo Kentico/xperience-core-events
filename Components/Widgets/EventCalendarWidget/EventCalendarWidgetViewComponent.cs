@@ -148,52 +148,5 @@ namespace Xperience.Core.Events
 
             return data;
         }
-
-        private string GetEventBody(Event e, EventCalendar c)
-        {
-            var body = new StringBuilder();
-            if (!string.IsNullOrEmpty(e.EventSummary))
-            {
-                body.Append($"<b>{e.EventSummary}</b>");
-            }
-
-            // Get attendee count
-            IEnumerable<EventAttendeeInfo> attendees = null;
-            if (c.EventCalendarShowAttendeeCount && e.EventCapacity > 0)
-            {
-                attendees = EventAttendeeInfo.Provider.Get()
-                    .WhereEquals(nameof(EventAttendeeInfo.NodeID), e.NodeID)
-                    .Column(nameof(EventAttendeeInfo.ContactID));
-                body.Append("<br/><span><i class='tui-full-calendar-icon tui-full-calendar-ic-user-b'></i></span>")
-                    .Append($"{attendees.Count()} of {e.EventCapacity}");
-            }
-
-            // Get contacts attending event
-            if (c.EventCalendarShowAttendeeNames)
-            {
-                if (attendees is null)
-                {
-                    attendees = EventAttendeeInfo.Provider.Get()
-                        .WhereEquals(nameof(EventAttendeeInfo.NodeID), e.NodeID)
-                        .Column(nameof(EventAttendeeInfo.ContactID));
-                }
-
-                // Get contacts in attendee list
-                var contactIds = attendees.Select(a => a.ContactID).ToList();
-                var contacts = ContactInfo.Provider.Get()
-                    .WhereIn(nameof(ContactInfo.ContactID), contactIds)
-                    .Columns(nameof(ContactInfo.ContactFirstName), nameof(ContactInfo.ContactLastName));
-
-                if (contacts.Count > 0)
-                {
-                    var names = contacts.Select(c => $"{c.ContactFirstName} {c.ContactLastName}").ToArray();
-                    body.Append("<br/>Attendees: ").Append(names.Join(", "));
-                }
-            }
-
-            body.Append($"<br/><a href='{pageUrlRetriever.Retrieve(e).AbsoluteUrl}'>View details &gt;</a>");
-
-            return body.ToString();
-        }
     }
 }

@@ -6,7 +6,7 @@ namespace Xperience.Core.Events
 {
     public class EventDto
     {
-        #region "Scheduled properties (automatically mapped)"
+        #region "Schedule properties (automatically mapped)"
 
         public string ID { get; set; }
         public string CalendarId { get; set; }
@@ -23,6 +23,7 @@ namespace Xperience.Core.Events
         public string Color { get; set; }
 
         #endregion
+
         #region "Custom properties"
 
         public bool ShowAttendeeCount { get; set; } = true;
