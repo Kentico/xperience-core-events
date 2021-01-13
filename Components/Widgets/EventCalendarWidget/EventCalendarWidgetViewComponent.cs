@@ -29,11 +29,6 @@ namespace Xperience.Core.Events
 
         public IViewComponentResult Invoke(ComponentViewModel<EventCalendarWidgetProperties> viewModel)
         {
-            if (httpContextAccessor.HttpContext.Kentico().Preview().Enabled)
-            {
-                return Content("The calendar is only available in live site mode.");
-            }
-
             if (viewModel is null)
             {
                 throw new ArgumentNullException(nameof(viewModel));

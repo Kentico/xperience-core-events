@@ -3,3 +3,4 @@ obj
 .dtbcache*
 .suo
 .vs
+.csproj.user

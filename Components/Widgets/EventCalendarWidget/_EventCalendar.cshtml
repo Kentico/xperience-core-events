@@ -1,24 +1,30 @@
 ﻿@model Xperience.Core.Events.EventCalendarWidgetViewModel
 
-<link rel="stylesheet" type="text/css" href="~/_content/Xperience.Core.Events/tui-calendar.min.css" />
+@{
+    await Html.RenderPartialAsync("_css.cshtml");
+}
 <style>
     #calendar-header {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
     }
+
     .render-range {
         font-weight: bold;
     }
+
     .header-spacer {
         flex-grow: 2;
     }
+
     .calendar-modes > button {
         border: none;
         background: none;
         outline: none;
         text-decoration: underline;
     }
+
     .calendar-navigation > button {
         border: none;
         background: none;
@@ -30,17 +36,10 @@
         width: 20px;
     }
 </style>
-<script src="~/_content/Xperience.Core.Events/tui-code-snippet.min.js"></script>
-<script src="~/_content/Xperience.Core.Events/tui-calendar.min.js"></script>
+@{
+    await Html.RenderPartialAsync("_js.cshtml");
+}
 <script type="text/javascript">
-    if (document.readyState === 'loading') {
-        document.addEventListener("DOMContentLoaded", function () {
-            initCalendar();
-        });
-    } else {
-        initCalendar();
-    }
-
     let CalendarList = [], mainCalendar;
 
     const addCalendars = () => {
@@ -152,6 +151,14 @@
     }
 
     const changeView = (mode) => { mainCalendar.changeView(mode); }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener("DOMContentLoaded", function () {
+            initCalendar();
+        });
+    } else {
+        initCalendar();
+    }
 </script>
 
 <div id="calendar-header">

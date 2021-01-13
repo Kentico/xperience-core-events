@@ -1,5 +1,6 @@
 ﻿using CMS.ContactManagement;
 using CMS.DocumentEngine.Types.Xperience;
+using CMS.Helpers;
 using CMS.Membership;
 using CMS.Newsletters;
 using Events;
@@ -26,6 +27,13 @@ namespace Xperience.Core.Events
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegistrationModel model)
         {
+            if (!ValidationHelper.IsEmail(model.Email))
+            {
+                ModelState.AddModelError("Email", "Invalid email.");
+
+                return PartialView("~/Components/Widgets/EventRegistrationFormWidget/_EventRegistrationForm.cshtml", model);
+            }
+
             string result;
             var page = pageDataContext.Retrieve<Event>().Page;
             var contact = contactProvider.GetContactForSubscribing(model.Email);
@@ -39,14 +47,14 @@ namespace Xperience.Core.Events
 
                 // Check if contact is already registered
                 var existingAttendee = EventAttendeeInfoProvider.ProviderObject.Get()
-                .WhereEquals("ContactID", contact.ContactID)
-                .WhereEquals("NodeID", page.NodeID)
-                .TopN(1)
-                .FirstOrDefault();
+                    .WhereEquals("ContactID", contact.ContactID)
+                    .WhereEquals("NodeID", page.NodeID)
+                    .TopN(1)
+                    .FirstOrDefault();
 
                 if (existingAttendee != null)
                 {
-                    result = "You are already registered for event!";
+                    result = "You are already registered for this event!";
                 }
                 else
                 {
