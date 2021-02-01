@@ -72,7 +72,7 @@ For example, to customize all calendars on your site, you can catch the event in
                 narrowWeekend: true
             }
         });
-});
+    });
 </script>
 ```
 
