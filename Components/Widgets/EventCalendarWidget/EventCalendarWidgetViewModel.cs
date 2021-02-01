@@ -7,5 +7,6 @@ namespace Xperience.Core.Events
     {
         public IEnumerable<EventDto> Events { get; set; }
         public IEnumerable<CalendarDto> Calendars { get; set; }
+        public string WidgetGUID { get; set; }
     }
 }

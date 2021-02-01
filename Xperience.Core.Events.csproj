@@ -5,18 +5,22 @@
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <IsMvcProject>true</IsMvcProject>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
-    <Version>0.0.27</Version>
+    <Version>0.0.100</Version>
   </PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="wwwroot\**\*" />
-  </ItemGroup>
+  <PropertyGroup>
+    <StaticWebAssetBasePath Condition="$(StaticWebAssetBasePath) == ''">/</StaticWebAssetBasePath>
+  </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Kentico.Xperience.AspNetCore.WebApp" Version="13.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\**\*" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -66,6 +66,7 @@ namespace Xperience.Core.Events
 
                 var model = new EventCalendarWidgetViewModel()
                 {
+                    WidgetGUID = viewModel.Properties.WidgetGUID,
                     Calendars = allCalendars.Select(c => {
                         return new CalendarDto()
                         {
@@ -83,7 +84,7 @@ namespace Xperience.Core.Events
             }
             else
             {
-                throw new Exception("A path was not selected in the widget properties to load calendars from.");
+                return Content("Please select a path in the widget properties");
             }
         }
 

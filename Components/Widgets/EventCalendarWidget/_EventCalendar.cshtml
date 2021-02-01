@@ -1,8 +1,8 @@
 ﻿@model Xperience.Core.Events.EventCalendarWidgetViewModel
-
 @{
     await Html.RenderPartialAsync("_css.cshtml");
 }
+<!--<link rel="stylesheet" href="/tui-calendar.min.css" />-->
 <style>
     #calendar-header {
         display: flex;
@@ -39,27 +39,25 @@
 @{
     await Html.RenderPartialAsync("_js.cshtml");
 }
+<!--<script type="text/javascript" src="/tui-code-snippet.min.js"></script>
+<script type="text/javascript" src="/tui-calendar.min.js"></script>-->
 <script type="text/javascript">
-    let CalendarList = [], mainCalendar;
+(function (window, Calendar) {
+    if (!window.eventCalendars) {
+        window.eventCalendars = [];
+    }
 
-    const addCalendars = () => {
+    const addCalendars = (list) => {
         const calendars = @Html.Raw(Json.Serialize(Model.Calendars));
-        CalendarList.push(...calendars);
+        list.push(...calendars);
     }
 
-    const findCalendar = (id) => {
-        let found;
-
-        CalendarList.forEach(function (calendar) {
-            if (calendar.id === id) {
-                found = calendar;
-            }
-        });
-
-        return found || CalendarList[0];
+    const findCalendar = (guid) => {
+        const firstMatch = window.eventCalendars.filter(arr =>  arr[0] === guid)[0];
+        return firstMatch[1];
     }
 
-    const addSchedules = () => {
+    const addSchedules = (cal) => {
         const json = @Html.Raw(Json.Serialize(Model.Events));
         json.forEach(s => {
             // Make custom (non-schedule) data available in raw
@@ -73,7 +71,7 @@
                 url: s.url
             };
         });
-        mainCalendar.createSchedules(json);
+        cal.createSchedules(json);
     }
 
     const getTimeTemplate = (schedule) => {
@@ -115,42 +113,76 @@
 
     function initCalendar() {
         // Options: https://nhn.github.io/tui.calendar/latest/Options
-        const Calendar = tui.Calendar;
-        mainCalendar = new Calendar('#calendar', {
+        const calendarList = [];
+        const cal = new Calendar('#calendar-@Model.WidgetGUID', {
             defaultView: 'month',
             template: {
                 time: getTimeTemplate,
                 popupDetailBody: popupDetailBody
             },
             isReadOnly: true,
-            calendars: CalendarList,
+            calendars: calendarList,
             useDetailPopup: true
         });
-        addCalendars();
-        addSchedules();
+
+        // Push calendar to array in window with WidgetGUID as key
+        window.eventCalendars.push(['@Model.WidgetGUID', cal]);
+
+        addCalendars(calendarList);
+        addSchedules(cal);
         updateHeader();
+        setEventListeners();
 
         // Raise init event
-        const event = new CustomEvent('calendar-init', { detail: { calendar: mainCalendar } });
+        const event = new CustomEvent('calendar-init', { detail: { calendar: cal } });
         document.dispatchEvent(event);
     }
 
-    const moveToNextOrPrevRange = (val) => {
-        if (val === -1) {
-            mainCalendar.prev();
-        } else if (val === 1) {
-            mainCalendar.next();
+    const updateHeader = () => {
+        const cal = findCalendar('@Model.WidgetGUID');
+        const options = { year: 'numeric', month: 'long' };
+        const header = cal.getDate().toDate().toLocaleString(undefined, options);
+        document.getElementById('render-range-@Model.WidgetGUID').innerHTML = header;
+    }
+
+    const onClickNavi = (e) => {
+        const action = getDataAction(e.target);
+        const cal = findCalendar('@Model.WidgetGUID');
+
+        switch (action) {
+            case 'move-prev':
+                cal.prev();
+                break;
+            case 'move-next':
+                cal.next();
+                break;
+            case 'move-today':
+                cal.today();
+                break;
+            case 'view-day':
+                cal.changeView('day');
+                break;
+            case 'view-week':
+                cal.changeView('week');
+                break;
+            case 'view-month':
+                cal.changeView('month');
+                break;
+            default:
+                return;
         }
+
         updateHeader();
     }
 
-    const updateHeader = () => {
-        let options = { year: 'numeric', month: 'long' };
-        let header = mainCalendar.getDate().toDate().toLocaleString(undefined, options);
-        document.getElementById('renderRange').innerHTML = header;
+    const getDataAction = (target) => {
+        return target.dataset ? target.dataset.action : target.getAttribute('data-action');
     }
 
-    const changeView = (mode) => { mainCalendar.changeView(mode); }
+    const setEventListeners = () => {
+        document.getElementById('calendar-navigation-@Model.WidgetGUID').addEventListener('click', onClickNavi, false);
+        document.getElementById('mode-navigation-@Model.WidgetGUID').addEventListener('click', onClickNavi, false);
+    }
 
     if (document.readyState === 'loading') {
         document.addEventListener("DOMContentLoaded", function () {
@@ -159,23 +191,24 @@
     } else {
         initCalendar();
     }
+}) (window, tui.Calendar);
 </script>
 
 <div id="calendar-header">
-    <span class="calendar-navigation">
-        <button type="button" onclick="moveToNextOrPrevRange(-1)">
-            <i class="tui-full-calendar-icon tui-full-calendar-ic-arrow-left"></i>
+    <span id="calendar-navigation-@Model.WidgetGUID" class="calendar-navigation">
+        <button type="button" data-action="move-prev">
+            <i class="tui-full-calendar-icon tui-full-calendar-ic-arrow-left" data-action="move-prev"></i>
         </button>
-        <span id="renderRange" class="render-range"></span>
-        <button type="button" onclick="moveToNextOrPrevRange(1)">
-            <i class="tui-full-calendar-icon tui-full-calendar-ic-arrow-right"></i>
+        <span id="render-range-@Model.WidgetGUID" class="render-range"></span>
+        <button type="button" data-action="move-next">
+            <i class="tui-full-calendar-icon tui-full-calendar-ic-arrow-right" data-action="move-next"></i>
         </button>
     </span>
     <span class="header-spacer"></span>
-    <span class="calendar-modes">
-        <button onclick="changeView('month')">Month</button>
-        <button onclick="changeView('week')">Week</button>
-        <button onclick="changeView('day')">Day</button>
+    <span id="mode-navigation-@Model.WidgetGUID" class="calendar-modes">
+        <button data-action="view-month">Month</button>
+        <button data-action="view-week">Week</button>
+        <button data-action="view-day">Day</button>
     </span>
 </div>
-<div id="calendar"></div>
+<div id="calendar-@Model.WidgetGUID"></div>
