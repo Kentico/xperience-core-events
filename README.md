@@ -67,7 +67,8 @@ For example, to customize all calendars on your site, you can catch the event in
         var calendar = e.detail.calendar;
         calendar.setOptions({
             month: {
-                daynames: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                daynames: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                startDayOfWeek: 1,
                 narrowWeekend: true
             }
         });
@@ -75,7 +76,7 @@ For example, to customize all calendars on your site, you can catch the event in
 </script>
 ```
 
-This makes Monday the first day of the week, and both Monday and Sunday will appear thinner than other days of the week.
+This changes the labels for the days of the week, makes Monday the first day of the week, and both Saturday and Sunday will appear thinner than other days of the week.
 
 ### Templates
 
