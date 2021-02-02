@@ -5,7 +5,7 @@
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <IsMvcProject>true</IsMvcProject>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
-    <Version>0.0.100</Version>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -16,7 +16,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Kentico.Xperience.AspNetCore.WebApp" Version="13.0.0" />
+    <PackageReference Include="Kentico.Xperience.AspNetCore.WebApp" Version="13.0.5" />
   </ItemGroup>
 
   <ItemGroup>
