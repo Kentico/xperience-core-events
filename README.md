@@ -31,9 +31,7 @@ Place the __Event registration__ widget on your `Xperience.Event` pages to displ
 
 ![Event registration live](/img/eventregistrationlive.png)
 
-You can also render the widget as a [standalone widget](https://docs.xperience.io/developing-websites/developing-xperience-applications-using-asp-net-core/page-builder-development-in-asp-net-core/rendering-widgets-directly-in-asp-net-core) in a view/page template instead of adding it to each page.
-
-Within the properties of the widget, you can modify what happens after a successful registration:
+You can also render the widget as a [standalone widget](https://docs.xperience.io/developing-websites/developing-xperience-applications-using-asp-net-core/page-builder-development-in-asp-net-core/rendering-widgets-directly-in-asp-net-core) in a view/page template instead of adding it to each page. Within the properties of the widget, you can modify what happens after a successful registration:
 
 ![Event registration properties](/img/eventregistrationproperties.png)
 
