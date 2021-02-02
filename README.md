@@ -33,6 +33,12 @@ Place the __Event registration__ widget on your `Xperience.Event` pages to displ
 
 You can also render the widget as a [standalone widget](https://docs.xperience.io/developing-websites/developing-xperience-applications-using-asp-net-core/page-builder-development-in-asp-net-core/rendering-widgets-directly-in-asp-net-core) in a view/page template instead of adding it to each page.
 
+Within the properties of the widget, you can modify what happens after a successful registration:
+
+![Event registration properties](/img/eventregistrationproperties.png)
+
+You can redirect the visitor to another page on the site, or display text where the form was previously rendered.
+
 ## Running code after registration
 
 In some cases you may want to run some code after a visitor registers, such as sending a confirmation email. You can use an [object event handler](https://docs.xperience.io/custom-development/handling-global-events/handling-object-events) for this:

@@ -1,7 +1,5 @@
-﻿using CMS.ContactManagement;
-using CMS.DocumentEngine.Types.Xperience;
+﻿using CMS.DocumentEngine.Types.Xperience;
 using CMS.Helpers;
-using CMS.Membership;
 using CMS.Newsletters;
 using Events;
 using Kentico.Content.Web.Mvc;
@@ -34,7 +32,7 @@ namespace Xperience.Core.Events
                 return PartialView("~/Components/Widgets/EventRegistrationFormWidget/_EventRegistrationForm.cshtml", model);
             }
 
-            string result;
+            string result = "";
             var page = pageDataContext.Retrieve<Event>().Page;
             var contact = contactProvider.GetContactForSubscribing(model.Email);
  
@@ -58,12 +56,21 @@ namespace Xperience.Core.Events
                 }
                 else
                 {
+                    // Successful registration
                     EventAttendeeInfoProvider.ProviderObject.Set(new EventAttendeeInfo() {
                         ContactID = contact.ContactID,
                         NodeID = page.NodeID,
                         EventAttendeeRegisteredOn = DateTime.Now
                     });
-                    result = "Successfully registered for event!";
+                    
+                    if(model.SubmitAction.Equals("text"))
+                    {
+                        result = model.ActionRelatedData;
+                    }
+                    else
+                    {
+                        return Redirect(model.ActionRelatedData);
+                    }
                 }
             }
             else

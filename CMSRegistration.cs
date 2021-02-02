@@ -13,6 +13,6 @@ using Xperience.Core.Events;
 [assembly: RegisterWidget(EventRegistrationFormWidgetViewComponent.IDENTIFIER,
     typeof(EventRegistrationFormWidgetViewComponent),
     "Event registration",
-    null,
+    typeof(EventRegistrationFormWidgetProperties),
     Description = "Allows visitors to register for events",
     IconClass = "icon-personalisation-variants")]

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Xperience.Core.Events
@@ -16,5 +17,11 @@ namespace Xperience.Core.Events
         [DisplayName("Email")]
         [MaxLength(250, ErrorMessage = "Maximum allowed length of the email is {1}")]
         public string Email { get; set; }
+
+        [HiddenInput]
+        public string SubmitAction { get; set; }
+
+        [HiddenInput]
+        public string ActionRelatedData { get; set; }
     }
 }

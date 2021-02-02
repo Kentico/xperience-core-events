@@ -3,10 +3,16 @@
 @using Xperience.Core.Events
 
 @model RegistrationModel
+@{ 
+    var submitAction = "";
+    if (Model.SubmitAction.Equals("text")) submitAction = "replaceForm(event)";
+}
 
-<form class="subscribe-form" asp-action="Register" asp-controller="EventRegistrationFormWidget" asp-antiforgery="true" onsubmit="replaceForm(event)">
-    <component-properties-data />
-    <page-data />
+<form class="subscribe-form" asp-action="Register" asp-controller="EventRegistrationFormWidget" asp-antiforgery="true" onsubmit="@submitAction">
+    <input asp-for="SubmitAction"/>
+    <input asp-for="ActionRelatedData"/>
+    <page-data/>
+    
 
     <div class="form-group">
         <div class="form-group-label">

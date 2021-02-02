@@ -5,25 +5,21 @@ using CMS.Helpers;
 using Events;
 using Kentico.Content.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
-using Kentico.Web.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Xperience.Core.Events
 {
     public class EventCalendarWidgetViewComponent : ViewComponent
     {
         public const string IDENTIFIER = "Xperience.Core.Events.EventCalendar";
-        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IPageUrlRetriever pageUrlRetriever;
 
-        public EventCalendarWidgetViewComponent(IHttpContextAccessor httpContextAccessor, IPageUrlRetriever pageUrlRetriever)
+        public EventCalendarWidgetViewComponent(IPageUrlRetriever pageUrlRetriever)
         {
-            this.httpContextAccessor = httpContextAccessor;
             this.pageUrlRetriever = pageUrlRetriever;
         }
 
