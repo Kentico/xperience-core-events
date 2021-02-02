@@ -1,4 +1,4 @@
-![Kentico.Xperience.Libraries 13.0.5](https://img.shields.io/badge/Kentico.Xperience.Libraries-v13.0.5-orange)
+[![Nuget](https://img.shields.io/nuget/v/Xperience.Core.Events)](https://www.nuget.org/packages/Xperience.Core.Events) ![Kentico.Xperience.Libraries 13.0.5](https://img.shields.io/badge/Kentico.Xperience.Libraries-v13.0.5-orange)
 
 # .NET Core Event Registration Widgets
 
