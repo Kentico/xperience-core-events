@@ -5,7 +5,6 @@ using CMS.Helpers;
 using Events;
 using Kentico.Content.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -32,7 +31,7 @@ namespace Xperience.Core.Events
 
             if (viewModel.Properties.Parent.Count() > 0)
             {
-                List<EventCalendar> allCalendars = new List<EventCalendar>(); ;
+                List<EventCalendar> allCalendars = new List<EventCalendar>();
                 var parentPath = viewModel.Properties.Parent.FirstOrDefault().NodeAliasPath;
 
                 // Check if selected path is a calendar page, or load all calendars under it

@@ -126,3 +126,15 @@ To customize this popup, you can register your own `popupDetailBody` function. Y
     });
 </script>
 ```
+
+## Compatibility
+
+This code is only available for use on Kentico Xperience 13 websites using the [.NET Core development model](https://docs.xperience.io/developing-websites/developing-xperience-applications-using-asp-net-core). The CMS and .NET Core applications must be hotfixed to _at least_ the version indicated at the top of the README.
+
+## Feedback & Contributing
+
+Check out the [contributing](https://github.com/kentico-ericd/xperience-core-events/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
+
+## License
+
+The repository is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
