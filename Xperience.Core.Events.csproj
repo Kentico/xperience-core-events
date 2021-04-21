@@ -5,7 +5,15 @@
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <IsMvcProject>true</IsMvcProject>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
-    <Version>1.0.2</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>xperience-core-events</PackageId>
+    <Version>1.0.3</Version>
+    <Authors>Eric Dugre</Authors>
+    <Company>Kentico</Company>
+    <PackageIconUrl>https://github.com/Kentico/Home/raw/master/images/logo_nuget.png</PackageIconUrl>
+    <Description>Custom .NET Core ViewComponents meant for displaying calendars of events and enabling event registration using a customizable, modern javascript library.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
