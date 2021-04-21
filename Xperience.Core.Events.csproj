@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>xperience-core-events</PackageId>
+    <PackageId>Xperience.Core.Events</PackageId>
     <Version>1.0.3</Version>
     <Authors>Eric Dugre</Authors>
     <Company>Kentico</Company>
